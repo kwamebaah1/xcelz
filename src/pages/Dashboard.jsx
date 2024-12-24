@@ -83,7 +83,7 @@ const Dashboard = () => {
             <MeetingCard
               key={meeting.id}
               meeting={meeting}
-              onEdit={(updatedMeeting) => handleEdit(meeting.id, updatedMeeting)}
+              onEdit={() => handleEdit(meeting)}
               onDelete={() => handleDelete(meeting.id)}
             />
           ))
