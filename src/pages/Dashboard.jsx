@@ -7,6 +7,7 @@ import axios from "axios";
 const Dashboard = () => {
   const [meetings, setMeetings] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [editingMeeting, setEditingMeeting] = useState(null);
 
   useEffect(() => {
     // Fetch all scheduled meetings from the server
@@ -20,12 +21,20 @@ const Dashboard = () => {
   }, []);
 
   const handleSchedule = (meeting) => {
-    setMeetings([...meetings, { ...meeting, id: Date.now() }]);
+    if (editingMeeting) {
+      setMeetings(
+        meetings.map((m) => (m.id === editingMeeting.id ? { ...m, ...meeting } : m))
+      );
+    } else {
+      setMeetings([...meetings, { ...meeting, id: Date.now() }]);
+    }
     setModalOpen(false);
+    setEditingMeeting(null);
   };
 
-  const handleEdit = (id, updatedMeeting) => {
-    setMeetings(meetings.map((m) => (m.id === id ? updatedMeeting : m)));
+  const handleEdit = (meeting) => {
+    setEditingMeeting(meeting);
+    setModalOpen(true);
   };
 
   const handleDelete = (id) => {
@@ -64,7 +73,7 @@ const Dashboard = () => {
           }}
         >
           <h2 className="text-xl font-bold mb-4">Schedule a Meeting</h2>
-          <ScheduleForm onSubmit={handleSchedule} unavailableSlots={meetings} />
+          <ScheduleForm onSubmit={handleSchedule} unavailableSlots={meetings} meeting={editingMeeting}/>
         </Box>
       </Modal>
 
