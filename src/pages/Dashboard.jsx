@@ -1,11 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Modal, Box } from "@mui/material";
 import ScheduleForm from "../components/ScheduleForm";
 import MeetingCard from "../components/MeetingCard";
+import axios from "axios";
 
 const Dashboard = () => {
   const [meetings, setMeetings] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
+
+  useEffect(() => {
+    // Fetch all scheduled meetings from the server
+    axios.get("http://localhost:5000/meetings")
+      .then(response => {
+        setMeetings(response.data);
+      })
+      .catch(error => {
+        console.error("Error fetching meetings:", error);
+      });
+  }, []);
 
   const handleSchedule = (meeting) => {
     setMeetings([...meetings, { ...meeting, id: Date.now() }]);
@@ -52,7 +64,7 @@ const Dashboard = () => {
           }}
         >
           <h2 className="text-xl font-bold mb-4">Schedule a Meeting</h2>
-          <ScheduleForm onSubmit={handleSchedule} />
+          <ScheduleForm onSubmit={handleSchedule} unavailableSlots={meetings} />
         </Box>
       </Modal>
 

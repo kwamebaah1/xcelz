@@ -7,7 +7,7 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const ScheduleForm = ({ onSubmit }) => {
+const ScheduleForm = ({ onSubmit, unavailableSlots }) => {
   const [date, setDate] = useState(null);
   const [time, setTime] = useState(null);
   const [duration, setDuration] = useState("");
@@ -15,9 +15,21 @@ const ScheduleForm = ({ onSubmit }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
+  // Get unavailable times for the selected date
+  const unavailableTimes = unavailableSlots
+    .filter(meeting => meeting.date === dayjs(date).format("YYYY-MM-DD"))
+    .map(meeting => meeting.time);
+
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
+    // Check if selected time is already unavailable
+    if (unavailableTimes.includes(dayjs(time).format("HH:mm"))) {
+      toast.error("This time slot is already taken. Please choose a different time.");
+      return;
+    }
+
     if (date && time && title && participants) {
       const meeting = {
         date: dayjs(date).format("YYYY-MM-DD"),
@@ -81,6 +93,7 @@ const ScheduleForm = ({ onSubmit }) => {
           value={time}
           onChange={(newTime) => setTime(newTime)}
           renderInput={(params) => <TextField {...params} fullWidth />}
+          disabledTimes={unavailableTimes}
         />
         <TextField
           label="Duration (in hours)"

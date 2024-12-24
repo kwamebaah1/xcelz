@@ -8,7 +8,7 @@ const MeetingCard = ({ meeting, onEdit, onDelete }) => {
       <p>{meeting.description}</p>
       <p>Date: {meeting.date}</p>
       <p>Time: {meeting.time}</p>
-      <p>Duration: {meeting.duration} mins</p>
+      <p>Duration: {meeting.duration} hrs</p>
       <div className="flex gap-2">
         <button className="bg-blue-500 text-white px-4 py-2 rounded shadow" onClick={onEdit}>
           Edit
