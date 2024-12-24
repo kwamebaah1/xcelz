@@ -73,7 +73,7 @@ const Dashboard = () => {
           }}
         >
           <h2 className="text-xl font-bold mb-4">Schedule a Meeting</h2>
-          <ScheduleForm onSubmit={handleSchedule} unavailableSlots={meetings} meeting={editingMeeting}/>
+          <ScheduleForm onSubmit={handleSchedule} unavailableSlots={meetings} initialData={editingMeeting}/>
         </Box>
       </Modal>
 

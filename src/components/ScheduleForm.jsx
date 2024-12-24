@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TextField, Button } from "@mui/material";
 import DatePicker from "./DatePicker";
 import TimePicker from "./TimePicker";
@@ -7,13 +7,24 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const ScheduleForm = ({ onSubmit, unavailableSlots }) => {
+const ScheduleForm = ({ onSubmit, unavailableSlots, initialData }) => {
   const [date, setDate] = useState(null);
   const [time, setTime] = useState(null);
   const [duration, setDuration] = useState("");
   const [participants, setParticipants] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+
+  useEffect(() => {
+    if (initialData) {
+      setDate(dayjs(initialData.date));
+      setTime(dayjs(initialData.time, "HH:mm"));
+      setDuration(initialData.duration);
+      setParticipants(initialData.participants);
+      setTitle(initialData.title);
+      setDescription(initialData.description);
+    }
+  }, [initialData]);
 
   // Get unavailable times for the selected date
   const unavailableTimes = unavailableSlots
