@@ -10,7 +10,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     // Fetch all scheduled meetings from the server
-    axios.get("http://localhost:5000/meetings")
+    axios.get("https://xcelz-backend.onrender.com/meetings")
       .then(response => {
         setMeetings(response.data);
       })

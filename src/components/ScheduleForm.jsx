@@ -41,7 +41,7 @@ const ScheduleForm = ({ onSubmit, unavailableSlots }) => {
       };
 
       try {
-        const response = await axios.post("http://localhost:5000/meetings", meeting);
+        const response = await axios.post("https://xcelz-backend.onrender.com/meetings", meeting);
         toast.success(`Meeting scheduled successfully with ${participants}!`);
         setTimeout(() => {
           onSubmit(response.data);
