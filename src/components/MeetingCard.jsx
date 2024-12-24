@@ -4,6 +4,7 @@ const MeetingCard = ({ meeting, onEdit, onDelete }) => {
   return (
     <div className="p-4 border rounded shadow m-2">
       <h2 className="text-xl font-bold">{meeting.title}</h2>
+      <p>Meeting scheduled with: {meeting.participants}</p>
       <p>{meeting.description}</p>
       <p>Date: {meeting.date}</p>
       <p>Time: {meeting.time}</p>

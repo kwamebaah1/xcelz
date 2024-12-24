@@ -30,8 +30,10 @@ const ScheduleForm = ({ onSubmit }) => {
 
       try {
         const response = await axios.post("http://localhost:5000/meetings", meeting);
-        onSubmit(response.data);
-        toast.success("Meeting scheduled successfully!");
+        toast.success(`Meeting scheduled successfully with ${participants}!`);
+        setTimeout(() => {
+          onSubmit(response.data);
+        }, 3000);
       } catch (error) {
         console.error("Error scheduling the meeting:", error);
         toast.error("Error scheduling the meeting. Please try again.");
