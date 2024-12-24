@@ -19,7 +19,7 @@ const ScheduleForm = ({ onSubmit }) => {
 
   return (
     <form
-      className="flex flex-col gap-4"
+      className="flex flex-col gap-6"
       onSubmit={(e) => {
         e.preventDefault();
         onSubmit(formData);

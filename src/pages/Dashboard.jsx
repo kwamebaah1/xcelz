@@ -1,12 +1,15 @@
 import React, { useState } from "react";
+import { Button, Modal, Box } from "@mui/material";
 import ScheduleForm from "../components/ScheduleForm";
 import MeetingCard from "../components/MeetingCard";
 
 const Dashboard = () => {
   const [meetings, setMeetings] = useState([]);
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const handleSchedule = (meeting) => {
     setMeetings([...meetings, { ...meeting, id: Date.now() }]);
+    setModalOpen(false); // Close the modal after scheduling
   };
 
   const handleEdit = (id, updatedMeeting) => {
@@ -17,19 +20,53 @@ const Dashboard = () => {
     setMeetings(meetings.filter((m) => m.id !== id));
   };
 
+  const handleModalOpen = () => setModalOpen(true);
+  const handleModalClose = () => setModalOpen(false);
+
   return (
     <div className="p-8">
-      <h1 className="text-2xl font-bold mb-4">Schedule Meetings</h1>
-      <ScheduleForm onSubmit={handleSchedule} />
+      <h1 className="text-2xl font-bold mb-4">Scheduled Meetings</h1>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleModalOpen}
+      >
+        Schedule a Meeting
+      </Button>
+
+      {/* Modal for ScheduleForm */}
+      <Modal open={isModalOpen} onClose={handleModalClose}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            width: 400,
+            borderRadius: 2,
+          }}
+        >
+          <h2 className="text-xl font-bold mb-4">Schedule a Meeting</h2>
+          <ScheduleForm onSubmit={handleSchedule} />
+        </Box>
+      </Modal>
+
       <div className="mt-8">
-        {meetings.map((meeting) => (
-          <MeetingCard
-            key={meeting.id}
-            meeting={meeting}
-            onEdit={() => handleEdit(meeting.id)}
-            onDelete={() => handleDelete(meeting.id)}
-          />
-        ))}
+        {meetings.length > 0 ? (
+          meetings.map((meeting) => (
+            <MeetingCard
+              key={meeting.id}
+              meeting={meeting}
+              onEdit={(updatedMeeting) => handleEdit(meeting.id, updatedMeeting)}
+              onDelete={() => handleDelete(meeting.id)}
+            />
+          ))
+        ) : (
+          <p className="text-gray-600">No scheduled meetings.</p>
+        )}
       </div>
     </div>
   );
