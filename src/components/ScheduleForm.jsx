@@ -1,71 +1,78 @@
 import React, { useState } from "react";
-import { TextField, Button, MenuItem } from "@mui/material";
-import DatePicker from "./DatePicker";
-import TimePicker from "./TimePicker";
+import { TextField, Button } from "@mui/material";
+import { DatePicker, TimePicker } from "@mui/lab";
+import dayjs from "dayjs";
 
 const ScheduleForm = ({ onSubmit }) => {
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    date: "",
-    time: "",
-    duration: "",
-    participants: "",
-  });
+  const [date, setDate] = useState(null);
+  const [time, setTime] = useState(null);
+  const [duration, setDuration] = useState("");
+  const [participants, setParticipants] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (date && time && title && participants) {
+      const meeting = {
+        date: dayjs(date).format("YYYY-MM-DD"),
+        time: dayjs(time).format("HH:mm"),
+        duration,
+        participants,
+        title,
+        description,
+      };
+      onSubmit(meeting);
+    }
   };
 
   return (
-    <form
-      className="flex flex-col gap-6"
-      onSubmit={(e) => {
-        e.preventDefault();
-        onSubmit(formData);
-      }}
-    >
+    <form onSubmit={handleSubmit}>
       <TextField
-        name="title"
         label="Title"
-        value={formData.title}
-        onChange={handleChange}
+        variant="outlined"
         fullWidth
+        margin="normal"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
       />
       <TextField
-        name="description"
-        label="Description"
-        value={formData.description}
-        onChange={handleChange}
+        label="Participants"
+        variant="outlined"
         fullWidth
+        margin="normal"
+        value={participants}
+        onChange={(e) => setParticipants(e.target.value)}
+      />
+      <TextField
+        label="Description"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
       />
       <DatePicker
-        value={formData.date}
-        onChange={(date) => setFormData({ ...formData, date })}
+        label="Date"
+        value={date}
+        onChange={(newDate) => setDate(newDate)}
+        renderInput={(params) => <TextField {...params} fullWidth />}
       />
       <TimePicker
-        value={formData.time}
-        onChange={(time) => setFormData({ ...formData, time })}
+        label="Time"
+        value={time}
+        onChange={(newTime) => setTime(newTime)}
+        renderInput={(params) => <TextField {...params} fullWidth />}
       />
       <TextField
-        name="duration"
-        label="Duration (in mins)"
-        value={formData.duration}
-        onChange={handleChange}
+        label="Duration (in hours)"
+        variant="outlined"
         fullWidth
+        margin="normal"
+        value={duration}
+        onChange={(e) => setDuration(e.target.value)}
       />
-      <TextField
-        name="participants"
-        label="Participants"
-        value={formData.participants}
-        onChange={handleChange}
-        select
-        fullWidth
-      >
-        <MenuItem value="Client">Client</MenuItem>
-        <MenuItem value="Freelancer">Freelancer</MenuItem>
-      </TextField>
-      <Button type="submit" variant="contained" color="primary">
+      <Button variant="contained" color="primary" type="submit">
         Schedule Meeting
       </Button>
     </form>

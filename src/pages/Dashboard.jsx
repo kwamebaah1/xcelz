@@ -9,7 +9,7 @@ const Dashboard = () => {
 
   const handleSchedule = (meeting) => {
     setMeetings([...meetings, { ...meeting, id: Date.now() }]);
-    setModalOpen(false); // Close the modal after scheduling
+    setModalOpen(false);
   };
 
   const handleEdit = (id, updatedMeeting) => {
@@ -25,14 +25,16 @@ const Dashboard = () => {
 
   return (
     <div className="p-8">
-      <h1 className="text-2xl font-bold mb-4">Scheduled Meetings</h1>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleModalOpen}
-      >
-        Schedule a Meeting
-      </Button>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold">Scheduled Meetings</h1>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleModalOpen}
+        >
+          Schedule a Meeting
+        </Button>
+      </div>
 
       {/* Modal for ScheduleForm */}
       <Modal open={isModalOpen} onClose={handleModalClose}>
